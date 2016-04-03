@@ -30,7 +30,10 @@
  *
  */
 function getFizzBuzz(num) {
-    throw new Error('Not implemented');
+    var result = '';
+    if (num % 3 == 0) result += 'Fizz';
+    if (num % 5 == 0) result += 'Buzz';
+    return !result ? num : result;
 }
 
 
@@ -46,7 +49,7 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-    throw new Error('Not implemented');
+    return (n === 1) ? 1 : n * getFactorial(n - 1);
 }
 
 
@@ -63,7 +66,10 @@ function getFactorial(n) {
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
 function getSumBetweenNumbers(n1, n2) {
-    throw new Error('Not implemented');
+    var sum = 0;
+    for (n1; n1 <= n2; n1++)
+        sum += n1;
+    return sum;
 }
 
 
@@ -81,8 +87,8 @@ function getSumBetweenNumbers(n1, n2) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(a,b,c) {
-    throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+    return a < b + c && b < a + c && c < a + b;
 }
 
 
@@ -226,7 +232,13 @@ function reverseString(str) {
  *   34143 => 34143
  */
 function reverseInteger(num) {
-    throw new Error('Not implemented');
+    var reversedNumber = 0;
+    while (num > 0) {
+        var curDigit = num % 10;
+        reversedNumber = reversedNumber * 10 + curDigit;
+        num = Math.floor(num / 10);
+    }
+    return reversedNumber;
 }
 
 
@@ -270,7 +282,12 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-    throw new Error('Not implemented');
+    var sum = 0;
+    while (num > 0) {
+        sum += num % 10;
+        num = Math.floor(num / 10);
+    }
+    return sum > 9 ? getDigitalRoot(sum) : sum;
 }
 
 
@@ -296,7 +313,19 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true 
  */
 function isBracketsBalanced(str) {
-    throw new Error('Not implemented');
+    var openedBrackets = [];
+    var validBrackets = '()[]{}<>';
+    var oBrackets = /[\[{\(<]/;
+    var cBrackets = /[\]}\)>]/;
+
+    for (var i = 0; i < str.length; i++) {
+        if (oBrackets.test(str[i]))
+            openedBrackets.push(str[i]);
+        if (cBrackets.test(str[i]))
+            if (validBrackets[validBrackets.indexOf(str[i]) - 1] !== openedBrackets.pop())
+                return false;
+    }
+    return openedBrackets.length === 0;
 }
 
 
@@ -356,7 +385,7 @@ function timespanToHumanString(startDate, endDate) {
  *    365, 10 => '365'
  */
 function toNaryString(num, n) {
-    throw new Error('Not implemented');
+    return num.toString(n);
 }
 
 
@@ -443,15 +472,15 @@ module.exports = {
     doRectanglesOverlap: doRectanglesOverlap,
     isInsideCircle: isInsideCircle,
     findFirstSingleChar: findFirstSingleChar,
-    getIntervalString : getIntervalString,
+    getIntervalString: getIntervalString,
     reverseString: reverseString,
     reverseInteger: reverseInteger,
     isCreditCardNumber: isCreditCardNumber,
     getDigitalRoot: getDigitalRoot,
     isBracketsBalanced: isBracketsBalanced,
-    timespanToHumanString : timespanToHumanString,
+    timespanToHumanString: timespanToHumanString,
     toNaryString: toNaryString,
     getCommonDirectoryPath: getCommonDirectoryPath,
     getMatrixProduct: getMatrixProduct,
-    evaluateTicTacToePosition : evaluateTicTacToePosition
+    evaluateTicTacToePosition: evaluateTicTacToePosition
 };
