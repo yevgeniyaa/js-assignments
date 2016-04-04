@@ -439,21 +439,16 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-    var files = pathes.map(function(curPath) {
-        return curPath.split('/');
-    });
-
+    var files = pathes.map(curPath => curPath.split('/'));
     var commonDir = [];
     for (var j = 0; j < files[0].length; j++) {
-        commonDir.push(files[0][j]);
-        for (var i = 1; i < files.length; i++)
-            if (files[i][j] !== commonDir[j]) {
-                commonDir.pop();
-                break;
-            }
-        if (commonDir.length - 1 !== j) break;
+        var controlValue = files[0][j];
+        if (files.every(parsedPath => parsedPath[j] === controlValue))
+            commonDir.push(controlValue + '/');
+        else
+            break;
     }
-    return commonDir.length === 0 ? '' : commonDir.join('/') + '/';
+    return commonDir.join('');
 }
 
 
