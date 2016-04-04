@@ -439,7 +439,21 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-    throw new Error('Not implemented');
+    var files = pathes.map(function(curPath) {
+        return curPath.split('/');
+    });
+
+    var commonDir = [];
+    for (var j = 0; j < files[0].length; j++) {
+        commonDir.push(files[0][j]);
+        for (var i = 1; i < files.length; i++)
+            if (files[i][j] !== commonDir[j]) {
+                commonDir.pop();
+                break;
+            }
+        if (commonDir.length - 1 !== j) break;
+    }
+    return commonDir.length === 0 ? '' : commonDir.join('/') + '/';
 }
 
 
@@ -506,7 +520,28 @@ function getMatrixProduct(m1, m2) {
  *
  */
 function evaluateTicTacToePosition(position) {
-    throw new Error('Not implemented');
+    var res = [0, 0, 0, 0, 0, 0, 0, 0]; //row1, row2, row3, col1, col2, col3, dg1, dg2
+
+    for (var i = 0, negDiagInd = position[i].length - 1; i < position.length; i++, negDiagInd--) {
+        for (var j = 0; j < position[i].length; j++) {
+            if (position[i][j] === 'X') {
+                res[i]++;
+                res[j + 3]++;
+                if (i === j) res[6]++;
+                if (j === negDiagInd) res[7]++;
+            }
+            if (position[i][j] === '0') {
+                res[i]--;
+                res[j + 3]--;
+                if (i === j) res[6]--;
+                if (j === negDiagInd) res[7]--;
+            }
+        }
+    }
+
+    if (Math.max.apply(null, res) === 3) return 'X';
+    if (Math.min.apply(null, res) === -3) return '0';
+    return undefined;
 }
 
 
