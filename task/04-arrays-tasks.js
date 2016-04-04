@@ -326,7 +326,8 @@ function getPositivesCount(arr) {
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
 function sortDigitNamesByNumericOrder(arr) {
-  throw new Error('Not implemented');
+  var pattern = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  return arr.sort((a, b) => pattern.indexOf(a) - pattern.indexOf(b));
 }
 
 /** 
@@ -420,7 +421,10 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  */
 function sortCitiesArray(arr) {
-  throw new Error('Not implemented');
+  return arr.sort((a, b) => {
+    var countryComparing = a.country.localeCompare(b.country);
+    return !!countryComparing ? countryComparing : a.city.localeCompare(b.city);
+  });
 }
 
 /**
@@ -459,7 +463,9 @@ function getIdentityMatrix(n) {
  *     3, 3   => [ 3 ]
  */
 function getIntervalArray(start, end) {
-  throw new Error('Not implemented');
+  return Array.from({
+    length: 1 + end - start
+  }, (element, index) => start + index);
 }
 
 /**
