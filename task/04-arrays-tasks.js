@@ -423,7 +423,7 @@ function toStringList(arr) {
 function sortCitiesArray(arr) {
   return arr.sort((a, b) => {
     var countryComparing = a.country.localeCompare(b.country);
-    return !!countryComparing ? countryComparing : a.city.localeCompare(b.city);
+    return countryComparing ? countryComparing : a.city.localeCompare(b.city);
   });
 }
 
@@ -448,9 +448,9 @@ function sortCitiesArray(arr) {
 function getIdentityMatrix(n) {
   return Array.from({
     length: n
-  }, (oL, oI) => Array.from({
+  }, (outterElement, outterIndex) => Array.from({
     length: n
-  }, (iL, iI) => iI === oI ? 1 : 0));
+  }, (innerElement, innerIndex) => innerIndex === outterIndex ? 1 : 0));
 }
 
 /**
@@ -522,10 +522,11 @@ function group(array, keySelector, valueSelector) {
     var curCountry = keySelector(obj);
     var curCity = valueSelector(obj);
     var countryInMap = map.get(curCountry);
-    if (!countryInMap)
-      map.set(curCountry, [curCity]);
-    else
+    if (countryInMap) {
       countryInMap.push(curCity);
+    } else {
+      map.set(curCountry, [curCity]);
+    }
     return map;
   }, new Map());
   return map;
@@ -561,7 +562,7 @@ function selectMany(arr, childrenSelector) {
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
 function getElementByIndexes(arr, indexes) {
-  return indexes.length === 0 ? arr : getElementByIndexes(arr[indexes.shift()], indexes);
+  return indexes.length ? getElementByIndexes(arr[indexes.shift()], indexes) : arr;
 }
 
 
