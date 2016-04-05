@@ -40,7 +40,7 @@ function findElement(arr, value) {
 function generateOdds(len) {
   return Array.from({
     length: len
-  }, (el, ind) => ind * 2 + 1);
+  }, (el, index) => index * 2 + 1);
 }
 
 
@@ -104,7 +104,7 @@ function getArrayOfStrings(arr) {
  *    [ false, 0, NaN, '', undefined ]   => [ ]
  */
 function removeFalsyValues(arr) {
-  return arr.filter(element => !!element);
+  return arr.filter(element => element);
 }
 
 /**
