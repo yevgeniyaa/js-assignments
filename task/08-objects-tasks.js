@@ -109,35 +109,119 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
+class CSSPath {
+    constructor() {
+        this._path = '';
+    }
+
+    element(v) {
+        if (this._element) {
+            throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+        }
+        this.checkPosition('element');
+        this._element = v;
+        this.addToPath(this._element);
+        return this;
+    }
+
+    id(v) {
+        if (this._id) {
+            throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+        }
+        this.checkPosition('id');
+        this._id = `#${v}`;
+        this.addToPath(this._id);
+        return this;
+    }
+
+    pseudoElement(v) {
+        if (this._pseudoElement) {
+            throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+        }
+        this.checkPosition('pseudoElement');
+        this._pseudoElement = `::${v}`;
+        this.addToPath(this._pseudoElement);
+        return this;
+    }
+
+    class(v) {
+        this.checkPosition('class');
+        this._class = `.${v}`;
+        this.addToPath(this._class);
+        return this;
+    }
+
+    attr(v) {
+        this.checkPosition('attr');
+        this._attr = `[${v}]`;
+        this.addToPath(this._attr);
+        return this;
+    }
+
+    pseudoClass(v) {
+        this.checkPosition('pseudoClass');
+        this._pseudoClass = `:${v}`;
+        this.addToPath(this._pseudoClass);
+        return this;
+    }
+
+    checkPosition(v) {
+        const order = ['element', 'id', 'class', 'attr', 'pseudoClass', 'pseudoElement'];
+        if (order.slice(order.findIndex(el => el === v) + 1).some(el => this[`_${el}`])) {
+            throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+        }
+    }
+
+    addToPath(v) {
+        this._path += v;
+    }
+
+    stringify() {
+        return this._path;
+    }
+}
+
+class CSSCombinedPath {
+    constructor(firstSelector, combinator, secondSelector) {
+        this.firstSelector = firstSelector;
+        this.combinator = combinator;
+        this.secondSelector = secondSelector;
+    }
+
+    stringify() {
+        return `${this.firstSelector.stringify()} ${this.combinator} ${this.secondSelector.stringify()}`;
+    }
+}
+
 const cssSelectorBuilder = {
 
     element: function(value) {
-        throw new Error('Not implemented');
+        return new CSSPath().element(value);
     },
 
     id: function(value) {
-        throw new Error('Not implemented');
+        return new CSSPath().id(value);
     },
 
     class: function(value) {
-        throw new Error('Not implemented');
+        return new CSSPath().class(value);
     },
 
     attr: function(value) {
-        throw new Error('Not implemented');
+        return new CSSPath().attr(value);
     },
 
     pseudoClass: function(value) {
-        throw new Error('Not implemented');
+        return new CSSPath().pseudoClass(value);
     },
 
     pseudoElement: function(value) {
-        throw new Error('Not implemented');
+        return new CSSPath().pseudoElement(value);
     },
 
-    combine: function(selector1, combinator, selector2) {
-        throw new Error('Not implemented');
-    },
+    combine: function (selector1, combinator, selector2) {
+        return new CSSCombinedPath(selector1, combinator, selector2);
+    }
 };
 
 
