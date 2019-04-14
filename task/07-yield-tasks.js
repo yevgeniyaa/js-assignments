@@ -33,7 +33,15 @@
  *
  */
 function* get99BottlesOfBeer() {
-    throw new Error('Not implemented');
+    let bottles = 99;
+    while (bottles > 1) {
+        yield `${bottles} bottles of beer on the wall, ${bottles} bottles of beer.`;
+        yield `Take one down and pass it around, ${--bottles} bottle${bottles > 1 ? 's' : ''} of beer on the wall.`
+    }
+    yield '1 bottle of beer on the wall, 1 bottle of beer.';
+    yield 'Take one down and pass it around, no more bottles of beer on the wall.';
+    yield 'No more bottles of beer on the wall, no more bottles of beer.';
+    yield 'Go to the store and buy some more, 99 bottles of beer on the wall.';
 }
 
 
@@ -47,7 +55,13 @@ function* get99BottlesOfBeer() {
  *
  */
 function* getFibonacciSequence() {
-    throw new Error('Not implemented');
+    let now = 0;
+    let next = 1;
+
+    while (true) {
+        yield now;
+        [now, next] = [next, now + next];
+    }
 }
 
 
@@ -83,6 +97,12 @@ function* getFibonacciSequence() {
  */
 function* depthTraversalTree(root) {
     throw new Error('Not implemented');
+    // yield root;
+    // if (root.children && root.children.length > 0) {
+    //     for (let i = 0; i< root.children.length; i++) {
+    //         yield *depthTraversalTree(root.children[i]);
+    //     }
+    // }
 }
 
 
@@ -126,7 +146,20 @@ function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 function* mergeSortedSequences(source1, source2) {
-    throw new Error('Not implemented');
+    let seq1 = source1();
+    let seq2 = source2();
+    let value1 = seq1.next();
+    let value2 = seq2.next();
+
+    while (!value1.done || !value2.done) {
+        if (!value1.done && (!value2.done && value1.value < value2.value || value2.done)) {
+            yield value1.value;
+            value1 = seq1.next();
+        } else {
+            yield value2.value;
+            value2 = seq2.next();
+        }
+    }
 }
 
 

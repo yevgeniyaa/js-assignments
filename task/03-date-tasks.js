@@ -14,7 +14,7 @@
  * For rfc2822 date specification refer to : http://tools.ietf.org/html/rfc2822#page-14
  *
  * @param {string} value
- * @return {date}
+ * @return {Date}
  *
  * @example:
  *    'December 17, 1995 03:24:00'    => Date()
@@ -30,7 +30,7 @@ function parseDataFromRfc2822(value) {
  * For ISO 8601 date specification refer to : https://en.wikipedia.org/wiki/ISO_8601
  *
  * @param {string} value
- * @return {date}
+ * @return {Date}
  *
  * @example :
  *    '2016-01-19T16:07:37+00:00'    => Date()
@@ -56,7 +56,7 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-  var year = date.getFullYear();
+  const year = date.getFullYear();
   return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
 }
 
@@ -77,7 +77,21 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-  throw new Error('Not implemented');
+    const seconds = 1000;
+    const minutes = seconds * 60;
+    const hours = minutes * 60;
+
+    const pad = (v, n) => v.toString().padStart(n, '0');
+
+    let msDif = endDate - startDate;
+
+    const hDif = Math.floor(msDif / hours);
+    msDif -= hDif * hours;
+    const mDif = Math.floor(msDif / minutes);
+    msDif -= mDif * minutes;
+    const sDif = Math.floor(msDif / seconds);
+    msDif -= sDif * seconds;
+    return `${pad(hDif, 2)}:${pad(mDif, 2)}:${pad(sDif, 2)}.${pad(msDif, 3)}`;
 }
 
 
@@ -95,7 +109,10 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-  throw new Error('Not implemented');
+    const hourAngle = 30 * (date.getUTCHours() % 12) + 0.5 * date.getUTCMinutes();
+    const minuteAngle = 6 * date.getUTCMinutes();
+    const result = Math.abs(hourAngle - minuteAngle);
+    return (result > 180 ? 360 - result : result) * Math.PI / 180;
 }
 
 
